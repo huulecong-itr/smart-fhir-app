@@ -139,12 +139,13 @@ export default {
       patients: [],
       selectedPatient: null,
       searchQuery: '',
-      clientId: "d4ac39f0-4d2c-4247-b5c6-582d0adaa648",
-      redirect: import.meta.env.PROD
-        ? "https://lucid-wozniak-940eae.netlify.app"
-        : "http://localhost:3000",
+      clientId: import.meta.env.VITE_CLIENT_ID,
+      redirect: import.meta.env.PROD 
+        ? import.meta.env.VITE_REDIRECT_PROD 
+        : import.meta.env.VITE_REDIRECT_DEV,
     };
   },
+
   computed: {
     authorizeLink() {
       return `https://fhir.epic.com/interconnect-fhir-oauth/oauth2/authorize?response_type=code&redirect_uri=${this.redirect}&client_id=${this.clientId}&state=1234&scope=patient.read,patient.search`;
@@ -183,7 +184,7 @@ export default {
         };
         
         const tokenResponse = await axios.post(
-          "https://fhir.epic.com/interconnect-fhir-oauth/oauth2/token",
+          import.meta.env.VITE_FHIR_TOKEN_URL,
           params,
           config
         );
